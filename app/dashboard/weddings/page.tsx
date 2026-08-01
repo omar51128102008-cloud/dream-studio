@@ -78,7 +78,7 @@ export default async function WeddingsPage() {
               }}
             >
               <Link
-                href={`/dashboard/weddings/${w.id}/upload`}
+                href={`/dashboard/weddings/${w.id}`}
                 style={{
                   display: "flex",
                   alignItems: "center",
