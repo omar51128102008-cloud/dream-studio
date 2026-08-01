@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "Dream Studio — Professional Photography & Videography",
   description:
     "Dream Studio — professional photography and videography in Palestine since 2008. Weddings, portraits, brand films, and events.",
+  icons: {
+    icon: "/logo-light.png",
+  },
 };
 
 export default function RootLayout({

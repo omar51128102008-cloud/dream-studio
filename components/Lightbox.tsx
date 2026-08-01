@@ -39,71 +39,44 @@ export default function Lightbox({
   }, [onClose]);
 
   return (
-    <div
-      onClick={onClose}
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 1000,
-        background: "rgba(0, 0, 0, 0.92)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "24px",
-        cursor: "zoom-out",
-      }}
-    >
+    <div className="lightbox" onClick={onClose}>
       <div
+        className="lightbox-stage"
         onClick={(e) => e.stopPropagation()}
-        style={{ position: "relative", maxWidth: "100%", maxHeight: "100%" }}
       >
         <img
+          className="lightbox-img"
           src={item.previewUrl}
-          alt={`Fullscreen preview`}
-          style={{
-            display: "block",
-            maxWidth: "100%",
-            maxHeight: "100vh",
-            borderRadius: 4,
-          }}
+          alt="Fullscreen preview"
         />
         <Watermark text={watermark} />
         <FavoriteButton
           favorited={selection.favorited}
           onToggle={onToggleFavorite}
-          position={{ bottom: 8, top: undefined, right: 8 }}
+          position={{ bottom: 8, right: 8, top: "auto" }}
           disabled={disabled}
         />
         <AlbumButton
           inAlbum={selection.inAlbum}
           onToggle={onToggleAlbum}
-          position={{ bottom: 8, top: undefined, left: 8 }}
+          position={{ bottom: 8, left: 8, top: "auto" }}
           disabled={disabled}
         />
         <NoteInput
           value={selection.clientNote}
           onSave={onSaveNote}
-          position={{ top: 8, bottom: undefined, left: 8, right: 60 }}
+          position={{ top: 8, left: 8, right: 60, bottom: "auto" }}
           disabled={disabled}
         />
       </div>
       <button
+        className="lightbox-close"
         onClick={onClose}
         aria-label="Close"
-        style={{
-          position: "absolute",
-          top: 16,
-          right: 20,
-          background: "none",
-          border: "none",
-          color: "#fff",
-          fontSize: 32,
-          lineHeight: 1,
-          cursor: "pointer",
-          zIndex: 1,
-        }}
       >
-        &times;
+        <svg viewBox="0 0 24 24">
+          <path d="M18 6 6 18M6 6l12 12" />
+        </svg>
       </button>
     </div>
   );

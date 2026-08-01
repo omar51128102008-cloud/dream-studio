@@ -19,7 +19,7 @@ export default function NoteInput({
     <input
       type="text"
       value={draft}
-      placeholder="Note..."
+      placeholder="Add a note…"
       readOnly={disabled}
       onChange={(e) => {
         if (disabled) return;
@@ -36,21 +36,11 @@ export default function NoteInput({
         e.stopPropagation();
         if (e.key === "Enter") e.currentTarget.blur();
       }}
+      className="note-field"
       style={{
-        position: "absolute",
-        bottom: 8,
-        left: 8,
-        right: 8,
-        zIndex: 2,
-        padding: "4px 8px",
-        fontSize: 12,
-        border: "1px solid rgba(255,255,255,0.5)",
-        borderRadius: 4,
-        background: "rgba(255,255,255,0.9)",
-        color: "#333",
-        cursor: disabled ? "default" : "text",
-        opacity: disabled ? 0.55 : 1,
         ...position,
+        opacity: disabled ? 0.55 : undefined,
+        cursor: disabled ? "default" : undefined,
       }}
     />
   );

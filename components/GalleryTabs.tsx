@@ -6,15 +6,18 @@ import Lightbox from "./Lightbox";
 import FavoriteButton from "./FavoriteButton";
 import AlbumButton from "./AlbumButton";
 import NoteInput from "./NoteInput";
+import StudioLogo from "./StudioLogo";
 
 export default function GalleryTabs({
   categories,
+  clientNames,
   watermark,
   initialSelections,
   token,
   submitted,
 }: {
   categories: GalleryCategory[];
+  clientNames: string;
   watermark: string;
   initialSelections: Record<string, SelectionState>;
   token: string;
@@ -105,127 +108,99 @@ export default function GalleryTabs({
   }
 
   if (categories.length === 0) {
-    return <p>No media yet.</p>;
+    return (
+      <div className="gallery-shell">
+        <p className="gallery-empty">No media yet.</p>
+      </div>
+    );
   }
 
   const section = categories.find((c) => c.name === active) ?? categories[0];
 
   return (
-    <div>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 12,
-          marginBottom: 12,
-        }}
-      >
-        <div role="tablist" aria-label="Gallery categories">
+    <>
+      <header className="gallery-band">
+        <div className="gallery-band-inner">
+          <div>
+            <StudioLogo onDark />
+            <h1 className="gallery-names">{clientNames}</h1>
+          </div>
+          <div className="gallery-actions">
+            {isSubmitted ? (
+              <span className="badge-submitted">Selection submitted</span>
+            ) : (
+              <button
+                onClick={submitSelection}
+                disabled={submitting}
+                className="btn-submit"
+              >
+                {submitting ? "Submitting…" : "Submit my selection"}
+              </button>
+            )}
+          </div>
+        </div>
+      </header>
+
+      <div className="gallery-shell">
+        <nav
+          className="gallery-tabs"
+          role="tablist"
+          aria-label="Gallery categories"
+        >
           {categories.map((category) => (
             <button
               key={category.name}
               role="tab"
               aria-selected={active === category.name}
+              className={"gallery-tab" + (active === category.name ? " is-active" : "")}
               onClick={() => setActive(category.name)}
-              style={{
-                marginRight: 8,
-                padding: "8px 16px",
-                fontWeight: active === category.name ? 600 : 400,
-              }}
             >
               {category.name}
+              <span className="gallery-tab-count">{category.items.length}</span>
             </button>
           ))}
-        </div>
-        {isSubmitted ? (
-          <span
-            style={{
-              padding: "8px 16px",
-              borderRadius: 4,
-              background: "rgba(46,125,50,0.15)",
-              color: "#2e7d32",
-              fontWeight: 600,
-            }}
-          >
-            Submitted
-          </span>
-        ) : (
-          <button
-            onClick={submitSelection}
-            disabled={submitting}
-            style={{
-              padding: "8px 16px",
-              borderRadius: 4,
-              border: "none",
-              background: "#111",
-              color: "#fff",
-              fontWeight: 600,
-              cursor: submitting ? "default" : "pointer",
-              opacity: submitting ? 0.6 : 1,
-            }}
-          >
-            {submitting ? "Submitting..." : "Submit My Selection"}
-          </button>
-        )}
-      </div>
+        </nav>
 
-      <section aria-label={`${section.name} photos`}>
-        <h2>{section.name}</h2>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
-            gap: 12,
-          }}
-        >
-          {section.items.map((item) => {
-            const sel = getSelection(item.id);
-            return (
-              <div key={item.id} style={{ position: "relative" }}>
-                <button
-                  onClick={() => setSelected(item)}
-                  aria-label={`Open ${section.name} photo`}
-                  style={{
-                    padding: 0,
-                    border: "none",
-                    background: "none",
-                    cursor: "zoom-in",
-                  }}
-                >
-                  <img
-                    src={item.previewUrl}
-                    alt={`${section.name} photo`}
-                    loading="lazy"
-                    style={{
-                      width: "100%",
-                      aspectRatio: "4 / 3",
-                      objectFit: "cover",
-                      borderRadius: 4,
-                    }}
+        <section aria-label={`${section.name} photos`}>
+          <span className="gallery-section-title">{section.name}</span>
+          <div className="gallery-grid">
+            {section.items.map((item) => {
+              const sel = getSelection(item.id);
+              return (
+                <div key={item.id} className="gallery-card">
+                  <button
+                    className="gallery-thumb"
+                    onClick={() => setSelected(item)}
+                    aria-label={`Open ${section.name} photo`}
+                  >
+                    <img
+                      src={item.previewUrl}
+                      alt={`${section.name} photo`}
+                      loading="lazy"
+                    />
+                  </button>
+                  <FavoriteButton
+                    favorited={sel.favorited}
+                    onToggle={() => toggleFavorite(item.id)}
+                    disabled={isSubmitted}
                   />
-                </button>
-                <FavoriteButton
-                  favorited={sel.favorited}
-                  onToggle={() => toggleFavorite(item.id)}
-                  disabled={isSubmitted}
-                />
-                <AlbumButton
-                  inAlbum={sel.inAlbum}
-                  onToggle={() => toggleAlbum(item.id)}
-                  position={{ left: 8, right: undefined }}
-                  disabled={isSubmitted}
-                />
-                <NoteInput
-                  value={sel.clientNote}
-                  onSave={(note) => saveNote(item.id, note)}
-                  disabled={isSubmitted}
-                />
-              </div>
-            );
-          })}
-        </div>
-      </section>
+                  <AlbumButton
+                    inAlbum={sel.inAlbum}
+                    onToggle={() => toggleAlbum(item.id)}
+                    position={{ top: 8, left: 8, right: undefined }}
+                    disabled={isSubmitted}
+                  />
+                  <NoteInput
+                    value={sel.clientNote}
+                    onSave={(note) => saveNote(item.id, note)}
+                    disabled={isSubmitted}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      </div>
 
       {selected && (
         <Lightbox
@@ -239,6 +214,6 @@ export default function GalleryTabs({
           onClose={() => setSelected(null)}
         />
       )}
-    </div>
+    </>
   );
 }

@@ -20,8 +20,8 @@ export default async function WeddingDetailPage({
 
   if (!user) {
     return (
-      <main style={{ maxWidth: 720, margin: "0 auto", padding: "48px 16px" }}>
-        <h1>Please sign in</h1>
+      <main className="dash-main">
+        <h1 className="dash-title">Please sign in</h1>
       </main>
     );
   }
@@ -79,123 +79,83 @@ export default async function WeddingDetailPage({
   const inAlbumCount = rows.filter((r) => r.inAlbum).length;
 
   return (
-    <main style={{ maxWidth: 720, margin: "0 auto", padding: "48px 16px" }}>
-      <p>
-        <Link href="/dashboard/weddings">&larr; Back to weddings</Link>
-      </p>
+    <main className="dash-main">
+      <Link href="/dashboard/weddings" className="dash-back">
+        ← Back to weddings
+      </Link>
 
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 12,
-          marginBottom: 8,
-        }}
-      >
-        <h1 style={{ margin: 0 }}>
-          {wedding.client_names ?? "Unnamed wedding"}
-        </h1>
-        <DownloadSelectionsButton weddingId={id} />
-      </div>
+      <header className="dash-header">
+        <div>
+          <h1 className="dash-title">
+            {wedding.client_names ?? "Unnamed wedding"}
+          </h1>
+          <p className="dash-sub">
+            {wedding.event_date
+              ? new Date(wedding.event_date).toLocaleDateString()
+              : "No date"}
+            {"  ·  "}
+            <span
+              className={
+                "dash-status" +
+                (wedding.status === "submitted"
+                  ? " is-submitted"
+                  : wedding.status === "in_progress" ||
+                      wedding.status === "in-progress"
+                    ? " is-in-progress"
+                    : "")
+              }
+            >
+              {wedding.status ?? "draft"}
+            </span>
+          </p>
+        </div>
+        <div className="dash-actions">
+          <DownloadSelectionsButton weddingId={id} />
+          <Link href={`/dashboard/weddings/${id}/upload`} className="btn-dash">
+            Upload media
+          </Link>
+        </div>
+      </header>
 
-      <div
-        style={{
-          display: "flex",
-          gap: 16,
-          alignItems: "center",
-          marginBottom: 24,
-          color: "#666",
-        }}
-      >
-        <span>
-          {wedding.event_date
-            ? new Date(wedding.event_date).toLocaleDateString()
-            : "No date"}
-        </span>
-        <span
-          style={{
-            padding: "4px 10px",
-            borderRadius: 999,
-            fontSize: 12,
-            fontWeight: 600,
-            textTransform: "capitalize",
-            background:
-              wedding.status === "submitted"
-                ? "rgba(46,125,50,0.15)"
-                : "rgba(0,0,0,0.06)",
-            color: wedding.status === "submitted" ? "#2e7d32" : "#333",
-          }}
-        >
-          {wedding.status}
-        </span>
-      </div>
-
-      <p style={{ color: "#666", marginTop: 0 }}>
-        <Link href={`/dashboard/weddings/${id}/upload`}>Upload media</Link>
-      </p>
-
-      <h2 style={{ marginBottom: 8 }}>
+      <h2 className="dash-table-title">
         Media{" "}
-        <span style={{ fontWeight: 400, color: "#666", fontSize: 16 }}>
-          ({rows.length}) &middot; {favoritedCount} favorited &middot;{" "}
-          {inAlbumCount} in album
+        <span className="dash-summary">
+          ({rows.length}) · {favoritedCount} favorited · {inAlbumCount} in album
         </span>
       </h2>
 
       {rows.length > 0 ? (
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-            fontSize: 14,
-          }}
-        >
+        <table className="dash-table dash-table--striped">
           <thead>
-            <tr style={{ textAlign: "left", color: "#666" }}>
-              <th style={{ padding: "8px 12px", borderBottom: "1px solid #ddd" }}>
-                Filename
-              </th>
-              <th style={{ padding: "8px 12px", borderBottom: "1px solid #ddd" }}>
-                Category
-              </th>
-              <th style={{ padding: "8px 12px", borderBottom: "1px solid #ddd" }}>
-                Favorited
-              </th>
-              <th style={{ padding: "8px 12px", borderBottom: "1px solid #ddd" }}>
-                In Album
-              </th>
-              <th style={{ padding: "8px 12px", borderBottom: "1px solid #ddd" }}>
-                Client Note
-              </th>
+            <tr>
+              <th>Filename</th>
+              <th>Category</th>
+              <th>Favorited</th>
+              <th>In album</th>
+              <th>Client note</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((row) => (
               <tr key={row.id}>
-                <td style={{ padding: "8px 12px", borderBottom: "1px solid #eee" }}>
-                  {row.filename}
-                </td>
-                <td style={{ padding: "8px 12px", borderBottom: "1px solid #eee" }}>
-                  {row.category}
-                </td>
-                <td style={{ padding: "8px 12px", borderBottom: "1px solid #eee" }}>
-                  {row.favorited ? "Yes" : "No"}
-                </td>
-                <td style={{ padding: "8px 12px", borderBottom: "1px solid #eee" }}>
-                  {row.inAlbum ? "Yes" : "No"}
-                </td>
-                <td style={{ padding: "8px 12px", borderBottom: "1px solid #eee" }}>
-                  {row.clientNote || <span style={{ color: "#bbb" }}>&mdash;</span>}
+                <td className="dash-row-name">{row.filename}</td>
+                <td className="dash-row-meta">{row.category}</td>
+                <td className="dash-row-meta">{row.favorited ? "Yes" : "—"}</td>
+                <td className="dash-row-meta">{row.inAlbum ? "Yes" : "—"}</td>
+                <td className="dash-row-meta">
+                  {row.clientNote || <span className="dash-note-dash">—</span>}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       ) : (
-        <p style={{ color: "#666" }}>
+        <p className="dash-empty">
           No media yet.{" "}
-          <Link href={`/dashboard/weddings/${id}/upload`}>Upload the first images</Link>.
+          <Link href={`/dashboard/weddings/${id}/upload`} className="dash-link">
+            Upload the first images
+          </Link>
+          .
         </p>
       )}
     </main>

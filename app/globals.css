@@ -1,26 +1,64 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f6f6f4;
+  --bg-dark: #0c0c0b;
+  --bg-dark-soft: #141412;
+  --ink: #131311;
+  --ink-soft: #5c5c57;
+  --ink-faint: #8c8c86;
+  --line: #dcdbd5;
+  --line-dark: #2a2a27;
+  --chrome: #adaba1;
+  --chrome-light: #e7e6e0;
+  --white: #ffffff;
+  --ease: cubic-bezier(0.16, 0.84, 0.44, 1);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: "Inter", sans-serif;
+  --font-serif: "Fraunces", serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- studio logo (light/dark swap, same pattern as landing nav) --- */
+.studio-logo {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  flex-shrink: 0;
+}
+.studio-logo img {
+  display: block;
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+.studio-logo .logo-light {
+  display: none;
+}
+.studio-logo .logo-dark {
+  display: block;
+}
+.studio-logo.on-dark .logo-light {
+  display: block;
+}
+.studio-logo.on-dark .logo-dark {
+  display: none;
 }

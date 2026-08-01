@@ -33,62 +33,40 @@ function LoginForm() {
   }
 
   return (
-    <main
-      style={{
-        maxWidth: 380,
-        margin: "0 auto",
-        padding: "48px 16px",
-      }}
-    >
-      <h1 style={{ marginBottom: 24 }}>Dream Studio</h1>
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 12,
-        }}
-      >
-        <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-          Email
+    <main className="dash-login">
+      <span className="dash-eyebrow">Dream Studio</span>
+      <h1 className="dash-login-title">Staff sign in</h1>
+      <form onSubmit={handleSubmit} className="dash-form">
+        <label className="dash-field">
+          <span>Email</span>
           <input
+            className="dash-input"
             type="email"
             required
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            style={{ padding: "8px 12px", borderRadius: 4, border: "1px solid #ccc" }}
           />
         </label>
-        <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-          Password
+        <label className="dash-field">
+          <span>Password</span>
           <input
+            className="dash-input"
             type="password"
             required
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            style={{ padding: "8px 12px", borderRadius: 4, border: "1px solid #ccc" }}
           />
         </label>
-        {error && (
-          <p style={{ color: "#b00020", margin: 0 }}>{error}</p>
-        )}
+        {error && <p className="dash-error">{error}</p>}
         <button
           type="submit"
           disabled={loading}
-          style={{
-            padding: "10px 16px",
-            borderRadius: 4,
-            border: "none",
-            background: "#111",
-            color: "#fff",
-            fontWeight: 600,
-            cursor: loading ? "default" : "pointer",
-            opacity: loading ? 0.6 : 1,
-          }}
+          className="btn-dash"
+          style={{ alignSelf: "flex-start", padding: "12px 28px" }}
         >
-          {loading ? "Signing in..." : "Sign In"}
+          {loading ? "Signing in…" : "Sign in"}
         </button>
       </form>
     </main>

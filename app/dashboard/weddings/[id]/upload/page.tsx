@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import UploadForm from "./UploadForm";
@@ -17,8 +18,8 @@ export default async function UploadPage({
 
   if (!user) {
     return (
-      <main style={{ maxWidth: 480, margin: "0 auto", padding: "48px 16px" }}>
-        <h1>Please sign in</h1>
+      <main className="dash-main">
+        <h1 className="dash-title">Please sign in</h1>
       </main>
     );
   }
@@ -40,11 +41,12 @@ export default async function UploadPage({
   }
 
   return (
-    <main style={{ maxWidth: 720, margin: "0 auto", padding: "48px 16px" }}>
-      <h1 style={{ marginBottom: 4 }}>Upload Media</h1>
-      <p style={{ color: "#666", marginTop: 0 }}>
-        {wedding.client_names ?? "Wedding"}
-      </p>
+    <main className="dash-main dash-narrow">
+      <Link href={`/dashboard/weddings/${id}`} className="dash-back">
+        ← Back to wedding
+      </Link>
+      <h1 className="dash-title">Upload Media</h1>
+      <p className="dash-sub">{wedding.client_names ?? "Wedding"}</p>
       <UploadForm weddingId={id} />
     </main>
   );

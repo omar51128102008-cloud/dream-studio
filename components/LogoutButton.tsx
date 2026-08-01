@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
-export default function LogoutButton() {
+export default function LogoutButton({ className = "" }: { className?: string }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -20,18 +20,9 @@ export default function LogoutButton() {
     <button
       onClick={handleLogout}
       disabled={loading}
-      style={{
-        padding: "8px 16px",
-        borderRadius: 4,
-        border: "1px solid #ccc",
-        background: "none",
-        color: "#111",
-        fontWeight: 600,
-        cursor: loading ? "default" : "pointer",
-        opacity: loading ? 0.6 : 1,
-      }}
+      className={`btn-dash ghost sm ${className}`}
     >
-      {loading ? "Signing out..." : "Sign Out"}
+      {loading ? "Signing out…" : "Sign out"}
     </button>
   );
 }

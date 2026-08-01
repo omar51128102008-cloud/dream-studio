@@ -69,16 +69,13 @@ export default function UploadForm({ weddingId }: { weddingId: string }) {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{ display: "flex", flexDirection: "column", gap: 16 }}
-    >
-      <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-        Category
+    <form onSubmit={handleSubmit} className="dash-form dash-form-mt">
+      <label className="dash-field">
+        <span>Category</span>
         <select
+          className="dash-select"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          style={{ padding: "8px 12px", borderRadius: 4, border: "1px solid #ccc" }}
         >
           {CATEGORIES.map((c) => (
             <option key={c} value={c}>
@@ -88,36 +85,28 @@ export default function UploadForm({ weddingId }: { weddingId: string }) {
         </select>
       </label>
 
-      <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-        Images (multiple allowed)
+      <label className="dash-field">
+        <span>Images (multiple allowed)</span>
         <input
+          className="dash-input"
           type="file"
           accept="image/*"
           multiple
           required
           onChange={(e) => setFiles(e.target.files)}
-          style={{ padding: "8px", borderRadius: 4, border: "1px solid #ccc" }}
         />
       </label>
 
-      {error && <p style={{ color: "#b00020", margin: 0 }}>{error}</p>}
-      {message && <p style={{ color: "#2e7d32", margin: 0 }}>{message}</p>}
+      {error && <p className="dash-error">{error}</p>}
+      {message && <p className="dash-success">{message}</p>}
 
       <button
         type="submit"
         disabled={uploading}
-        style={{
-          padding: "10px 16px",
-          borderRadius: 4,
-          border: "none",
-          background: "#111",
-          color: "#fff",
-          fontWeight: 600,
-          cursor: uploading ? "default" : "pointer",
-          opacity: uploading ? 0.6 : 1,
-        }}
+        className="btn-dash"
+        style={{ alignSelf: "flex-start" }}
       >
-        {uploading ? "Uploading..." : "Upload"}
+        {uploading ? "Uploading…" : "Upload"}
       </button>
     </form>
   );

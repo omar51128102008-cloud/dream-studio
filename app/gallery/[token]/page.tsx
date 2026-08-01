@@ -1,5 +1,7 @@
+import "../../gallery.css";
 import { createClient } from "@/lib/supabase/server";
 import { getMediaUrl } from "@/lib/supabase/storage";
+import GalleryEntry from "@/components/GalleryEntry";
 import GalleryTabs from "@/components/GalleryTabs";
 import type { GalleryCategory, SelectionState } from "@/types/media";
 
@@ -19,9 +21,12 @@ export default async function GalleryPage({
 
   if (error || !wedding) {
     return (
-      <main>
-        <h1>Gallery not found</h1>
-        <p>We couldn&apos;t find a gallery for that link.</p>
+      <main className="gallery-shell">
+        <span className="gallery-eyebrow">Dream Studio</span>
+        <h1 className="gallery-names">Gallery not found</h1>
+        <p className="gallery-empty">
+          We couldn&apos;t find a gallery for that link.
+        </p>
       </main>
     );
   }
@@ -65,17 +70,23 @@ export default async function GalleryPage({
   }
 
   const categories = [...byCategory.values()];
+  const clientNames = wedding.client_names ?? "Dream Studio";
+  const heroPreview = categories[0]?.items[0]?.previewUrl ?? "";
 
   return (
-    <main>
-      <h1>{wedding.client_names}</h1>
+    <GalleryEntry
+      clientNames={clientNames}
+      previewUrl={heroPreview}
+      token={token}
+    >
       <GalleryTabs
         categories={categories}
-        watermark={wedding.client_names ?? "Dream Studio"}
+        clientNames={clientNames}
+        watermark={clientNames}
         initialSelections={selectionByMedia}
         token={token}
         submitted={wedding.status === "submitted"}
       />
-    </main>
+    </GalleryEntry>
   );
 }

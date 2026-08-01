@@ -47,18 +47,9 @@ export default function DownloadSelectionsButton({
     <button
       onClick={handleDownload}
       disabled={downloading}
-      style={{
-        padding: "10px 16px",
-        borderRadius: 4,
-        border: "1px solid #111",
-        background: "#fff",
-        color: "#111",
-        fontWeight: 600,
-        cursor: downloading ? "default" : "pointer",
-        opacity: downloading ? 0.6 : 1,
-      }}
+      className="btn-dash ghost"
     >
-      {downloading ? "Downloading..." : "Download Selections"}
+      {downloading ? "Downloading…" : "Download selections"}
     </button>
   );
 }

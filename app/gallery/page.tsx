@@ -1,7 +1,17 @@
+import "../gallery.css";
+import StudioLogo from "@/components/StudioLogo";
+
 export default function Gallery() {
   return (
-    <main>
-      <h1>Gallery</h1>
-    </main>
+    <>
+      <header className="gallery-band">
+        <div className="gallery-band-inner">
+          <div>
+            <StudioLogo onDark />
+            <h1 className="gallery-names">Gallery</h1>
+          </div>
+        </div>
+      </header>
+    </>
   );
 }

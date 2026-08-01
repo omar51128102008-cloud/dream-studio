@@ -1,0 +1,402 @@
+/* ============ STAFF DASHBOARD ============ */
+
+.dash {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Inter", sans-serif;
+}
+
+/* --- top nav --- */
+.dash-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg-dark);
+  border-bottom: 1px solid var(--line-dark);
+}
+.dash-nav-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 13px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.dash-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+.dash-nav-links a {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--chrome-light);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.dash-nav-links a:hover {
+  color: var(--white);
+}
+
+/* --- dark header band --- */
+.dash-band {
+  background: var(--bg-dark);
+  color: var(--chrome-light);
+  border-bottom: 1px solid var(--line-dark);
+}
+.dash-band-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 56px 40px 48px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.dash-band .dash-title {
+  color: var(--white);
+}
+.dash-band .dash-sub {
+  color: var(--chrome);
+}
+
+.dash-main {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 44px 40px 120px;
+}
+.dash-narrow {
+  max-width: 560px;
+}
+
+/* --- header --- */
+.dash-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 32px;
+}
+.dash-title {
+  font-family: "Fraunces", serif;
+  font-weight: 400;
+  font-size: clamp(28px, 3vw, 40px);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0;
+}
+.dash-sub {
+  color: var(--ink-faint);
+  font-size: 13px;
+  margin: 6px 0 0;
+}
+.dash-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dash-actions.justify-end {
+  justify-content: flex-end;
+}
+
+/* --- buttons --- */
+.btn-dash {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  background: var(--ink);
+  color: var(--bg);
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.btn-dash:hover:not(:disabled) {
+  background: transparent;
+  color: var(--ink);
+  box-shadow: 0 3px 12px rgba(12, 12, 11, 0.14);
+}
+.btn-dash.ghost {
+  background: transparent;
+  color: var(--ink);
+}
+.btn-dash.ghost:hover:not(:disabled) {
+  background: var(--ink);
+  color: var(--bg);
+  box-shadow: 0 3px 12px rgba(12, 12, 11, 0.14);
+}
+.btn-dash.on-dark {
+  background: transparent;
+  border-color: var(--chrome-light);
+  color: var(--chrome-light);
+}
+.btn-dash.on-dark:hover:not(:disabled) {
+  background: var(--chrome-light);
+  color: var(--bg-dark);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
+}
+.btn-dash.sm {
+  padding: 5px 10px;
+  font-size: 11.5px;
+}
+.btn-dash:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* --- links --- */
+.dash-link {
+  color: var(--ink-soft);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+}
+.dash-link:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+.dash-back {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-decoration: none;
+  margin-bottom: 26px;
+}
+.dash-back:hover {
+  color: var(--ink);
+}
+
+/* --- table / contact sheet --- */
+.dash-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.dash-table th {
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+.dash-table td {
+  padding: 14px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+.dash-table tbody tr {
+  transition: background 0.2s ease;
+}
+.dash-table tbody tr:hover {
+  background: var(--chrome-light);
+}
+.dash-table--striped tbody tr:nth-child(even) {
+  background: var(--chrome-light);
+}
+.dash-table--striped tbody tr:nth-child(even):hover {
+  background: var(--line);
+}
+.dash-table--striped tbody tr:nth-child(odd):hover {
+  background: var(--chrome-light);
+}
+.dash-row-name {
+  font-weight: 500;
+  color: var(--ink);
+}
+.dash-row-meta {
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+.dash-status {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: capitalize;
+  color: var(--ink-soft);
+  background: transparent;
+  white-space: nowrap;
+}
+.dash-status.is-submitted {
+  border-color: var(--ink);
+  color: var(--bg);
+  background: var(--ink);
+}
+.dash-status.is-in-progress {
+  border-color: var(--line);
+  color: var(--ink);
+  background: var(--chrome-light);
+}
+.dash-note-dash {
+  color: var(--ink-faint);
+}
+
+/* --- section titles --- */
+.dash-table-title {
+  font-family: "Fraunces", serif;
+  font-weight: 400;
+  font-size: 24px;
+  color: var(--ink);
+  margin: 40px 0 18px;
+}
+.dash-summary {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--ink-faint);
+}
+
+/* --- nav rows (dashboard home) --- */
+.dash-row-link {
+  border-bottom: 1px solid var(--line);
+}
+.dash-row-link a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 4px;
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+.dash-row-link a span {
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+.dash-row-link a:hover {
+  color: var(--ink-soft);
+}
+
+/* --- forms --- */
+.dash-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 520px;
+}
+.dash-form-mt {
+  margin-top: 32px;
+}
+.dash-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dash-field > span {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.dash-input {
+  padding: 10px 2px;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.25s ease;
+}
+.dash-input:focus {
+  border-color: var(--ink);
+}
+.dash-input[type="date"],
+.dash-input[type="email"],
+.dash-input[type="password"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+.dash-input[type="file"] {
+  padding: 8px 0;
+  font-size: 13.5px;
+}
+.dash-select {
+  padding: 10px 2px;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.25s ease;
+}
+.dash-select:focus {
+  border-color: var(--ink);
+}
+.dash-error {
+  color: var(--ink);
+  font-size: 13px;
+  margin: 0;
+}
+.dash-success {
+  color: var(--ink-soft);
+  font-size: 13px;
+  margin: 0;
+}
+.dash-empty {
+  color: var(--ink-faint);
+  font-size: 14px;
+}
+
+/* --- login --- */
+.dash-login {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 80px 24px;
+}
+.dash-eyebrow {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+.dash-login-title {
+  font-family: "Fraunces", serif;
+  font-weight: 400;
+  font-size: 36px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0 0 32px;
+}
+
+@media (max-width: 700px) {
+  .dash-main {
+    padding: 32px 20px 96px;
+  }
+  .dash-nav-inner {
+    padding: 13px 20px;
+  }
+  .dash-band-inner {
+    padding: 44px 20px 36px;
+  }
+}
