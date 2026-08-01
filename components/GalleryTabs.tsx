@@ -1,21 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import type { GalleryCategory } from "@/types/media";
+import type { GalleryCategory, GalleryMedia } from "@/types/media";
+import Lightbox from "./Lightbox";
 
 export default function GalleryTabs({
   categories,
+  watermark,
 }: {
   categories: GalleryCategory[];
+  watermark: string;
 }) {
   const [active, setActive] = useState(categories[0]?.name ?? "");
+  const [selected, setSelected] = useState<GalleryMedia | null>(null);
 
   if (categories.length === 0) {
     return <p>No media yet.</p>;
   }
 
-  const section =
-    categories.find((c) => c.name === active) ?? categories[0];
+  const section = categories.find((c) => c.name === active) ?? categories[0];
 
   return (
     <div>
@@ -47,21 +50,40 @@ export default function GalleryTabs({
           }}
         >
           {section.items.map((item) => (
-            <img
+            <button
               key={item.id}
-              src={item.previewUrl}
-              alt={`${section.name} photo`}
-              loading="lazy"
+              onClick={() => setSelected(item)}
+              aria-label={`Open ${section.name} photo`}
               style={{
-                width: "100%",
-                aspectRatio: "4 / 3",
-                objectFit: "cover",
-                borderRadius: 4,
+                padding: 0,
+                border: "none",
+                background: "none",
+                cursor: "zoom-in",
               }}
-            />
+            >
+              <img
+                src={item.previewUrl}
+                alt={`${section.name} photo`}
+                loading="lazy"
+                style={{
+                  width: "100%",
+                  aspectRatio: "4 / 3",
+                  objectFit: "cover",
+                  borderRadius: 4,
+                }}
+              />
+            </button>
           ))}
         </div>
       </section>
+
+      {selected && (
+        <Lightbox
+          item={selected}
+          watermark={watermark}
+          onClose={() => setSelected(null)}
+        />
+      )}
     </div>
   );
 }

@@ -52,7 +52,10 @@ export default async function GalleryPage({
   return (
     <main>
       <h1>{wedding.client_names}</h1>
-      <GalleryTabs categories={categories} />
+      <GalleryTabs
+        categories={categories}
+        watermark={wedding.client_names ?? "Dream Studio"}
+      />
     </main>
   );
 }
