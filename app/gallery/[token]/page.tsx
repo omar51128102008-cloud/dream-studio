@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import GalleryTabs from "@/components/GalleryTabs";
 
 export default async function GalleryPage({
   params,
@@ -28,6 +29,7 @@ export default async function GalleryPage({
   return (
     <main>
       <h1>{data.client_names}</h1>
+      <GalleryTabs />
     </main>
   );
 }
