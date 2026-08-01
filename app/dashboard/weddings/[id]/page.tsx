@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getMediaUrl } from "@/lib/supabase/storage";
 import DownloadSelectionsButton from "@/components/DownloadSelectionsButton";
+import DeleteWeddingButton from "@/components/DeleteWeddingButton";
 import MediaWorkspace from "@/components/MediaWorkspace";
 
 export const dynamic = "force-dynamic";
@@ -114,6 +115,10 @@ export default async function WeddingDetailPage({
           <Link href={`/dashboard/weddings/${id}/upload`} className="btn-dash">
             Upload media
           </Link>
+          <DeleteWeddingButton
+            weddingId={id}
+            clientNames={wedding.client_names ?? ""}
+          />
         </div>
       </header>
 

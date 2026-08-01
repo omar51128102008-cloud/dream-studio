@@ -661,6 +661,54 @@
   gap: 10px;
 }
 
+/* --- confirm modal --- */
+.dash-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(12, 12, 11, 0.62);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.dash-modal-box {
+  width: 100%;
+  max-width: 460px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 30px 28px;
+  box-shadow: 0 24px 60px rgba(12, 12, 11, 0.28);
+}
+.dash-modal-title {
+  font-family: "Fraunces", serif;
+  font-weight: 400;
+  font-size: 24px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0 0 12px;
+}
+.dash-modal-text {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin: 0 0 10px;
+}
+.dash-modal-text strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+.dash-modal-box .dash-input {
+  margin: 8px 0 14px;
+}
+.dash-modal-box .dash-error {
+  margin-bottom: 14px;
+}
+.dash-modal-box .dash-actions {
+  margin-top: 4px;
+}
+
 @media (max-width: 700px) {
   .dash-main {
     padding: 32px 20px 96px;
