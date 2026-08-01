@@ -15,15 +15,35 @@ export default function Dashboard() {
         <h1 style={{ margin: 0 }}>Dashboard</h1>
         <LogoutButton />
       </div>
-      <nav>
+      <nav
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 12,
+        }}
+      >
+        <Link
+          href="/dashboard/weddings"
+          style={{
+            display: "block",
+            padding: "16px",
+            borderRadius: 8,
+            border: "1px solid #e5e5e5",
+            color: "#111",
+            textDecoration: "none",
+            fontWeight: 600,
+          }}
+        >
+          Weddings
+        </Link>
         <Link
           href="/dashboard/weddings/new"
           style={{
-            display: "inline-block",
-            padding: "10px 16px",
-            borderRadius: 4,
-            background: "#111",
-            color: "#fff",
+            display: "block",
+            padding: "16px",
+            borderRadius: 8,
+            border: "1px solid #e5e5e5",
+            color: "#111",
             textDecoration: "none",
             fontWeight: 600,
           }}
