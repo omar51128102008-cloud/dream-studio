@@ -13,7 +13,7 @@ export default async function GalleryPage({
 
   const { data: wedding, error } = await supabase
     .from("weddings")
-    .select("id, client_names")
+    .select("id, client_names, status")
     .eq("access_token", token)
     .maybeSingle();
 
@@ -73,6 +73,8 @@ export default async function GalleryPage({
         categories={categories}
         watermark={wedding.client_names ?? "Dream Studio"}
         initialSelections={selectionByMedia}
+        token={token}
+        submitted={wedding.status === "submitted"}
       />
     </main>
   );

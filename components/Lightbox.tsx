@@ -11,6 +11,7 @@ export default function Lightbox({
   item,
   watermark,
   selection,
+  disabled,
   onToggleFavorite,
   onToggleAlbum,
   onSaveNote,
@@ -19,6 +20,7 @@ export default function Lightbox({
   item: GalleryMedia;
   watermark: string;
   selection: SelectionState;
+  disabled: boolean;
   onToggleFavorite: () => void;
   onToggleAlbum: () => void;
   onSaveNote: (note: string) => void;
@@ -70,16 +72,19 @@ export default function Lightbox({
           favorited={selection.favorited}
           onToggle={onToggleFavorite}
           position={{ bottom: 8, top: undefined, right: 8 }}
+          disabled={disabled}
         />
         <AlbumButton
           inAlbum={selection.inAlbum}
           onToggle={onToggleAlbum}
           position={{ bottom: 8, top: undefined, left: 8 }}
+          disabled={disabled}
         />
         <NoteInput
           value={selection.clientNote}
           onSave={onSaveNote}
           position={{ top: 8, bottom: undefined, left: 8, right: 60 }}
+          disabled={disabled}
         />
       </div>
       <button

@@ -5,18 +5,22 @@ export default function FavoriteButton({
   onToggle,
   size = 18,
   position,
+  disabled = false,
 }: {
   favorited: boolean;
   onToggle: () => void;
   size?: number;
   position?: React.CSSProperties;
+  disabled?: boolean;
 }) {
   return (
     <button
       onClick={(e) => {
+        if (disabled) return;
         e.stopPropagation();
         onToggle();
       }}
+      disabled={disabled}
       aria-pressed={favorited}
       aria-label={favorited ? "Remove from favorites" : "Add to favorites"}
       style={{
@@ -32,7 +36,8 @@ export default function FavoriteButton({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        cursor: "pointer",
+        cursor: disabled ? "default" : "pointer",
+        opacity: disabled ? 0.55 : 1,
         ...position,
       }}
     >

@@ -5,18 +5,22 @@ export default function AlbumButton({
   onToggle,
   size = 18,
   position,
+  disabled = false,
 }: {
   inAlbum: boolean;
   onToggle: () => void;
   size?: number;
   position?: React.CSSProperties;
+  disabled?: boolean;
 }) {
   return (
     <button
       onClick={(e) => {
+        if (disabled) return;
         e.stopPropagation();
         onToggle();
       }}
+      disabled={disabled}
       aria-pressed={inAlbum}
       aria-label={inAlbum ? "Remove from album" : "Add to album"}
       style={{
@@ -32,7 +36,8 @@ export default function AlbumButton({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        cursor: "pointer",
+        cursor: disabled ? "default" : "pointer",
+        opacity: disabled ? 0.55 : 1,
         ...position,
       }}
     >
