@@ -1,65 +1,77 @@
 "use client";
 
 import { useState } from "react";
-import type { GalleryCategory, GalleryMedia } from "@/types/media";
+import type { GalleryCategory, GalleryMedia, SelectionState } from "@/types/media";
 import Lightbox from "./Lightbox";
 import FavoriteButton from "./FavoriteButton";
+import AlbumButton from "./AlbumButton";
+import NoteInput from "./NoteInput";
 
 export default function GalleryTabs({
   categories,
   watermark,
-  favoritedIds,
+  initialSelections,
 }: {
   categories: GalleryCategory[];
   watermark: string;
-  favoritedIds: string[];
+  initialSelections: Record<string, SelectionState>;
 }) {
   const [active, setActive] = useState(categories[0]?.name ?? "");
   const [selected, setSelected] = useState<GalleryMedia | null>(null);
-  const [favorites, setFavorites] = useState<Set<string>>(
-    () => new Set(favoritedIds)
-  );
+  const [selections, setSelections] = useState(initialSelections);
+
+  function getSelection(mediaId: string): SelectionState {
+    return (
+      selections[mediaId] ?? { favorited: false, inAlbum: false, clientNote: "" }
+    );
+  }
+
+  function patchSelection(
+    mediaId: string,
+    patch: Partial<SelectionState>
+  ) {
+    setSelections((prev) => ({
+      ...prev,
+      [mediaId]: { ...getSelection(mediaId), ...patch },
+    }));
+  }
+
+  async function savePatch(mediaId: string, patch: Partial<SelectionState>) {
+    const res = await fetch("/api/selections", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        mediaId,
+        patch: {
+          favorited: patch.favorited,
+          in_album: patch.inAlbum,
+          client_note: patch.clientNote,
+        },
+      }),
+    });
+    if (!res.ok) {
+      console.error("[selections] save failed", await res.json());
+    }
+    return res.ok;
+  }
 
   async function toggleFavorite(mediaId: string) {
-    const next = !favorites.has(mediaId);
-    setFavorites((prev) => {
-      const updated = new Set(prev);
-      if (next) {
-        updated.add(mediaId);
-      } else {
-        updated.delete(mediaId);
-      }
-      return updated;
-    });
+    const prev = getSelection(mediaId).favorited;
+    patchSelection(mediaId, { favorited: !prev });
+    const ok = await savePatch(mediaId, { favorited: !prev });
+    if (!ok) patchSelection(mediaId, { favorited: prev });
+  }
 
-    try {
-      const res = await fetch("/api/favorites", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mediaId }),
-      });
-      if (!res.ok) {
-        setFavorites((prev) => {
-          const updated = new Set(prev);
-          if (next) {
-            updated.delete(mediaId);
-          } else {
-            updated.add(mediaId);
-          }
-          return updated;
-        });
-      }
-    } catch {
-      setFavorites((prev) => {
-        const updated = new Set(prev);
-        if (next) {
-          updated.delete(mediaId);
-        } else {
-          updated.add(mediaId);
-        }
-        return updated;
-      });
-    }
+  async function toggleAlbum(mediaId: string) {
+    const prev = getSelection(mediaId).inAlbum;
+    patchSelection(mediaId, { inAlbum: !prev });
+    const ok = await savePatch(mediaId, { inAlbum: !prev });
+    if (!ok) patchSelection(mediaId, { inAlbum: prev });
+  }
+
+  async function saveNote(mediaId: string, note: string) {
+    const ok = await savePatch(mediaId, { clientNote: note });
+    if (!ok) patchSelection(mediaId, { clientNote: getSelection(mediaId).clientNote });
   }
 
   if (categories.length === 0) {
@@ -97,39 +109,48 @@ export default function GalleryTabs({
             gap: 12,
           }}
         >
-          {section.items.map((item) => (
-            <div
-              key={item.id}
-              style={{ position: "relative" }}
-            >
-              <button
-                onClick={() => setSelected(item)}
-                aria-label={`Open ${section.name} photo`}
-                style={{
-                  padding: 0,
-                  border: "none",
-                  background: "none",
-                  cursor: "zoom-in",
-                }}
-              >
-                <img
-                  src={item.previewUrl}
-                  alt={`${section.name} photo`}
-                  loading="lazy"
+          {section.items.map((item) => {
+            const sel = getSelection(item.id);
+            return (
+              <div key={item.id} style={{ position: "relative" }}>
+                <button
+                  onClick={() => setSelected(item)}
+                  aria-label={`Open ${section.name} photo`}
                   style={{
-                    width: "100%",
-                    aspectRatio: "4 / 3",
-                    objectFit: "cover",
-                    borderRadius: 4,
+                    padding: 0,
+                    border: "none",
+                    background: "none",
+                    cursor: "zoom-in",
                   }}
+                >
+                  <img
+                    src={item.previewUrl}
+                    alt={`${section.name} photo`}
+                    loading="lazy"
+                    style={{
+                      width: "100%",
+                      aspectRatio: "4 / 3",
+                      objectFit: "cover",
+                      borderRadius: 4,
+                    }}
+                  />
+                </button>
+                <FavoriteButton
+                  favorited={sel.favorited}
+                  onToggle={() => toggleFavorite(item.id)}
                 />
-              </button>
-              <FavoriteButton
-                favorited={favorites.has(item.id)}
-                onToggle={() => toggleFavorite(item.id)}
-              />
-            </div>
-          ))}
+                <AlbumButton
+                  inAlbum={sel.inAlbum}
+                  onToggle={() => toggleAlbum(item.id)}
+                  position={{ left: 8, right: undefined }}
+                />
+                <NoteInput
+                  value={sel.clientNote}
+                  onSave={(note) => saveNote(item.id, note)}
+                />
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -137,8 +158,10 @@ export default function GalleryTabs({
         <Lightbox
           item={selected}
           watermark={watermark}
-          favorited={favorites.has(selected.id)}
+          selection={getSelection(selected.id)}
           onToggleFavorite={() => toggleFavorite(selected.id)}
+          onToggleAlbum={() => toggleAlbum(selected.id)}
+          onSaveNote={(note) => saveNote(selected.id, note)}
           onClose={() => setSelected(null)}
         />
       )}

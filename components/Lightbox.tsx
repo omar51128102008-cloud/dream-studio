@@ -1,21 +1,27 @@
 "use client";
 
 import { useEffect } from "react";
-import type { GalleryMedia } from "@/types/media";
+import type { GalleryMedia, SelectionState } from "@/types/media";
 import Watermark from "./Watermark";
 import FavoriteButton from "./FavoriteButton";
+import AlbumButton from "./AlbumButton";
+import NoteInput from "./NoteInput";
 
 export default function Lightbox({
   item,
   watermark,
-  favorited,
+  selection,
   onToggleFavorite,
+  onToggleAlbum,
+  onSaveNote,
   onClose,
 }: {
   item: GalleryMedia;
   watermark: string;
-  favorited: boolean;
+  selection: SelectionState;
   onToggleFavorite: () => void;
+  onToggleAlbum: () => void;
+  onSaveNote: (note: string) => void;
   onClose: () => void;
 }) {
   useEffect(() => {
@@ -61,9 +67,19 @@ export default function Lightbox({
         />
         <Watermark text={watermark} />
         <FavoriteButton
-          favorited={favorited}
+          favorited={selection.favorited}
           onToggle={onToggleFavorite}
           position={{ bottom: 8, top: undefined, right: 8 }}
+        />
+        <AlbumButton
+          inAlbum={selection.inAlbum}
+          onToggle={onToggleAlbum}
+          position={{ bottom: 8, top: undefined, left: 8 }}
+        />
+        <NoteInput
+          value={selection.clientNote}
+          onSave={onSaveNote}
+          position={{ top: 8, bottom: undefined, left: 8, right: 60 }}
         />
       </div>
       <button

@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { getMediaUrl } from "@/lib/supabase/storage";
 import GalleryTabs from "@/components/GalleryTabs";
-import type { GalleryCategory } from "@/types/media";
+import type { GalleryCategory, SelectionState } from "@/types/media";
 
 export default async function GalleryPage({
   params,
@@ -36,12 +36,18 @@ export default async function GalleryPage({
 
   const { data: selections } = await supabase
     .from("selections")
-    .select("media_id, favorited")
+    .select("media_id, favorited, in_album, client_note")
     .in("media_id", mediaIds);
 
-  const favoritedIds = (selections ?? [])
-    .filter((s) => s.favorited)
-    .map((s) => s.media_id);
+  const selectionByMedia: Record<string, SelectionState> = {};
+  for (const item of media ?? []) {
+    const sel = (selections ?? []).find((s) => s.media_id === item.id);
+    selectionByMedia[item.id] = {
+      favorited: sel?.favorited ?? false,
+      inAlbum: sel?.in_album ?? false,
+      clientNote: sel?.client_note ?? "",
+    };
+  }
 
   const byCategory = new Map<string, GalleryCategory>();
   for (const item of media ?? []) {
@@ -66,7 +72,7 @@ export default async function GalleryPage({
       <GalleryTabs
         categories={categories}
         watermark={wedding.client_names ?? "Dream Studio"}
-        favoritedIds={favoritedIds}
+        initialSelections={selectionByMedia}
       />
     </main>
   );

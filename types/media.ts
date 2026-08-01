@@ -8,3 +8,9 @@ export type GalleryCategory = {
   name: string;
   items: GalleryMedia[];
 };
+
+export type SelectionState = {
+  favorited: boolean;
+  inAlbum: boolean;
+  clientNote: string;
+};
