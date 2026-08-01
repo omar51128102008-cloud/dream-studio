@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { getMediaUrl } from "@/lib/supabase/storage";
 import DownloadSelectionsButton from "@/components/DownloadSelectionsButton";
+import MediaWorkspace from "@/components/MediaWorkspace";
 
 export const dynamic = "force-dynamic";
 
@@ -44,7 +46,7 @@ export default async function WeddingDetailPage({
 
   const { data: media } = await supabase
     .from("media")
-    .select("id, category, media_type")
+    .select("id, category, media_type, preview_path")
     .eq("wedding_id", id)
     .order("created_at", { ascending: true });
 
@@ -66,17 +68,15 @@ export default async function WeddingDetailPage({
     counters.set(category, index);
     const sel = selectionByMedia.get(item.id);
     return {
-      ...item,
+      id: item.id,
       category,
       filename: `${category}-${String(index).padStart(2, "0")}`,
       favorited: sel?.favorited ?? false,
       inAlbum: sel?.in_album ?? false,
       clientNote: sel?.client_note ?? "",
+      previewUrl: item.preview_path ? getMediaUrl(item.preview_path) : "",
     };
   });
-
-  const favoritedCount = rows.filter((r) => r.favorited).length;
-  const inAlbumCount = rows.filter((r) => r.inAlbum).length;
 
   return (
     <main className="dash-main">
@@ -117,47 +117,7 @@ export default async function WeddingDetailPage({
         </div>
       </header>
 
-      <h2 className="dash-table-title">
-        Media{" "}
-        <span className="dash-summary">
-          ({rows.length}) · {favoritedCount} favorited · {inAlbumCount} in album
-        </span>
-      </h2>
-
-      {rows.length > 0 ? (
-        <table className="dash-table dash-table--striped">
-          <thead>
-            <tr>
-              <th>Filename</th>
-              <th>Category</th>
-              <th>Favorited</th>
-              <th>In album</th>
-              <th>Client note</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.id}>
-                <td className="dash-row-name">{row.filename}</td>
-                <td className="dash-row-meta">{row.category}</td>
-                <td className="dash-row-meta">{row.favorited ? "Yes" : "—"}</td>
-                <td className="dash-row-meta">{row.inAlbum ? "Yes" : "—"}</td>
-                <td className="dash-row-meta">
-                  {row.clientNote || <span className="dash-note-dash">—</span>}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p className="dash-empty">
-          No media yet.{" "}
-          <Link href={`/dashboard/weddings/${id}/upload`} className="dash-link">
-            Upload the first images
-          </Link>
-          .
-        </p>
-      )}
+      <MediaWorkspace weddingId={id} initialRows={rows} />
     </main>
   );
 }

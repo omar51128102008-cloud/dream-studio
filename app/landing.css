@@ -315,3 +315,22 @@ footer{background:var(--bg-dark);color:#8f8e85;padding:80px 0 30px;}
 .footer-bottom .socials svg{stroke:#c8c7bf;}
 .footer-bottom .socials a:hover{background:var(--chrome-light);border-color:var(--chrome-light);}
 .footer-bottom .socials a:hover svg{stroke:var(--bg-dark);}
+
+/* ============ PHONE ============ */
+@media (max-width:560px){
+  .container{padding:0 20px;}
+  .section-pad{padding:76px 0;}
+  #hero{padding:150px 20px 84px;}
+  #hero h1{font-size:clamp(28px,9vw,38px);}
+  .hero-ctas{flex-direction:column;align-items:stretch;width:100%;max-width:340px;margin:0 auto;}
+  .hero-ctas .btn{justify-content:center;}
+  .stat .num{font-size:28px;}
+  .service-card{padding:40px 26px;}
+  .gallery-head{margin-bottom:40px;}
+  .filters button{padding:9px 16px;}
+  .t-controls{margin-top:44px;}
+  .footer-top{gap:26px;}
+  .footer-nav{gap:18px;}
+  #contactForm button[type=submit]{width:100%;justify-content:center;}
+  .info-row .k{width:96px;}
+}
