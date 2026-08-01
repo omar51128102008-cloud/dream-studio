@@ -1,43 +1,44 @@
 "use client";
 
 import { useState } from "react";
+import type { GalleryCategory } from "@/types/media";
 
-const categories = ["Preparation", "Ceremony", "Reception", "Portraits", "Details"];
+export default function GalleryTabs({
+  categories,
+}: {
+  categories: GalleryCategory[];
+}) {
+  const [active, setActive] = useState(categories[0]?.name ?? "");
 
-const placeholderMedia: Record<string, number> = {
-  Preparation: 6,
-  Ceremony: 12,
-  Reception: 9,
-  Portraits: 8,
-  Details: 5,
-};
+  if (categories.length === 0) {
+    return <p>No media yet.</p>;
+  }
 
-export default function GalleryTabs() {
-  const [active, setActive] = useState(categories[0]);
+  const section =
+    categories.find((c) => c.name === active) ?? categories[0];
 
   return (
     <div>
       <div role="tablist" aria-label="Gallery categories">
         {categories.map((category) => (
           <button
-            key={category}
+            key={category.name}
             role="tab"
-            aria-selected={active === category}
-            onClick={() => setActive(category)}
+            aria-selected={active === category.name}
+            onClick={() => setActive(category.name)}
             style={{
               marginRight: 8,
               padding: "8px 16px",
-              fontWeight: active === category ? 600 : 400,
+              fontWeight: active === category.name ? 600 : 400,
             }}
           >
-            {category}
+            {category.name}
           </button>
         ))}
       </div>
 
-      <section aria-label={`${active} photos`}>
-        <h2>{active}</h2>
-        <p>Placeholder section — media coming soon.</p>
+      <section aria-label={`${section.name} photos`}>
+        <h2>{section.name}</h2>
         <div
           style={{
             display: "grid",
@@ -45,22 +46,19 @@ export default function GalleryTabs() {
             gap: 12,
           }}
         >
-          {Array.from({ length: placeholderMedia[active] }, (_, i) => (
-            <div
-              key={i}
+          {section.items.map((item) => (
+            <img
+              key={item.id}
+              src={item.previewUrl}
+              alt={`${section.name} photo`}
+              loading="lazy"
               style={{
+                width: "100%",
                 aspectRatio: "4 / 3",
-                background: "#e5e4df",
+                objectFit: "cover",
                 borderRadius: 4,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#8c8c86",
-                fontSize: 12,
               }}
-            >
-              {active} {i + 1}
-            </div>
+            />
           ))}
         </div>
       </section>
