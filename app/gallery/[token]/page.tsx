@@ -32,6 +32,17 @@ export default async function GalleryPage({
     .eq("wedding_id", wedding.id)
     .order("created_at", { ascending: true });
 
+  const mediaIds = (media ?? []).map((m) => m.id);
+
+  const { data: selections } = await supabase
+    .from("selections")
+    .select("media_id, favorited")
+    .in("media_id", mediaIds);
+
+  const favoritedIds = (selections ?? [])
+    .filter((s) => s.favorited)
+    .map((s) => s.media_id);
+
   const byCategory = new Map<string, GalleryCategory>();
   for (const item of media ?? []) {
     const name = item.category ?? "Other";
@@ -55,6 +66,7 @@ export default async function GalleryPage({
       <GalleryTabs
         categories={categories}
         watermark={wedding.client_names ?? "Dream Studio"}
+        favoritedIds={favoritedIds}
       />
     </main>
   );

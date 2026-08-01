@@ -3,14 +3,19 @@
 import { useEffect } from "react";
 import type { GalleryMedia } from "@/types/media";
 import Watermark from "./Watermark";
+import FavoriteButton from "./FavoriteButton";
 
 export default function Lightbox({
   item,
   watermark,
+  favorited,
+  onToggleFavorite,
   onClose,
 }: {
   item: GalleryMedia;
   watermark: string;
+  favorited: boolean;
+  onToggleFavorite: () => void;
   onClose: () => void;
 }) {
   useEffect(() => {
@@ -55,6 +60,11 @@ export default function Lightbox({
           }}
         />
         <Watermark text={watermark} />
+        <FavoriteButton
+          favorited={favorited}
+          onToggle={onToggleFavorite}
+          position={{ bottom: 8, top: undefined, right: 8 }}
+        />
       </div>
       <button
         onClick={onClose}
