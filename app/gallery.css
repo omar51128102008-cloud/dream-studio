@@ -560,11 +560,12 @@
   max-width: 360px;
 }
 .gallery-pin-input {
-  width: 220px;
+  width: 100%;
+  max-width: 320px;
   text-align: center;
   font-family: "Inter", sans-serif;
-  font-size: 28px;
-  letter-spacing: 0.35em;
+  font-size: 18px;
+  letter-spacing: 0.08em;
   padding: 12px 8px;
   border: none;
   border-bottom: 2px solid var(--chrome);
@@ -670,7 +671,7 @@
     padding: 24px 20px;
   }
   .gallery-pin-input {
-    width: 200px;
+    max-width: 280px;
   }
   .gallery-entry-welcome {
     margin: 20px auto 34px;

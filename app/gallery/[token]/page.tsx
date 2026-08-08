@@ -1,10 +1,15 @@
 import "../../gallery.css";
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { getMediaUrl } from "@/lib/supabase/storage";
 import GalleryEntry from "@/components/GalleryEntry";
 import GalleryGate from "@/components/GalleryGate";
 import GalleryTabs from "@/components/GalleryTabs";
 import type { GalleryCategory, SelectionState } from "@/types/media";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default async function GalleryPage({
   params,

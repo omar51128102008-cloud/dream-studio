@@ -42,7 +42,7 @@ export default function GalleryGate({
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (checking || pin.length !== 6) return;
+    if (checking || pin.length === 0) return;
     setError(null);
     setChecking(true);
     try {
@@ -59,7 +59,16 @@ export default function GalleryGate({
         }
         setUnlocked(true);
       } else {
-        setError("That PIN isn't correct. Please try again.");
+        let msg = "That PIN isn't correct. Please try again.";
+        try {
+          const body = await res.json();
+          if (body && typeof body.error === "string" && body.error) {
+            msg = body.error;
+          }
+        } catch {
+          // fall back to the generic message
+        }
+        setError(msg);
       }
     } catch {
       setError("We couldn't check the PIN right now. Please try again.");
@@ -90,14 +99,11 @@ export default function GalleryGate({
         </p>
         <input
           className="gallery-pin-input"
-          type="text"
-          inputMode="numeric"
-          pattern="[0-9]*"
-          autoComplete="one-time-code"
-          maxLength={6}
-          placeholder="••••••"
+          type="password"
+          autoComplete="current-password"
+          placeholder="Enter the access PIN"
           value={pin}
-          onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
+          onChange={(e) => setPin(e.target.value)}
           aria-label="Access PIN"
           autoFocus
         />
@@ -109,7 +115,7 @@ export default function GalleryGate({
         <button
           type="submit"
           className="btn-begin"
-          disabled={checking || pin.length !== 6}
+          disabled={checking || pin.length === 0}
         >
           {checking ? "Checking…" : "Unlock gallery"}
         </button>

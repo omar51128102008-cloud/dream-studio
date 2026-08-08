@@ -1,6 +1,18 @@
 import { NextResponse } from "next/server";
-import { randomBytes, randomInt } from "crypto";
+import { randomBytes } from "crypto";
 import { createClient } from "@/lib/supabase/server";
+
+const PIN_CHARSET =
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+";
+
+function generatePin(): string {
+  const bytes = randomBytes(24);
+  let pin = "";
+  for (let i = 0; i < 24; i++) {
+    pin += PIN_CHARSET[bytes[i] % PIN_CHARSET.length];
+  }
+  return pin;
+}
 
 export async function POST(request: Request) {
   let clientNames: string;
@@ -65,7 +77,7 @@ export async function POST(request: Request) {
   }
 
   const access_token = randomBytes(16).toString("base64url");
-  const pin = randomInt(100000, 1000000).toString();
+  const pin = generatePin();
 
   const { data, error } = await supabase
     .from("weddings")

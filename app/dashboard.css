@@ -322,8 +322,8 @@
 }
 .dash-access-value.mono {
   font-family: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, monospace;
-  font-size: 18px;
-  letter-spacing: 0.3em;
+  font-size: 13px;
+  letter-spacing: 0.04em;
 }
 
 /* --- section titles --- */
