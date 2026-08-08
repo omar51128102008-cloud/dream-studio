@@ -2,6 +2,7 @@ import "../../gallery.css";
 import { createClient } from "@/lib/supabase/server";
 import { getMediaUrl } from "@/lib/supabase/storage";
 import GalleryEntry from "@/components/GalleryEntry";
+import GalleryGate from "@/components/GalleryGate";
 import GalleryTabs from "@/components/GalleryTabs";
 import type { GalleryCategory, SelectionState } from "@/types/media";
 
@@ -15,7 +16,7 @@ export default async function GalleryPage({
 
   const { data: wedding, error } = await supabase
     .from("weddings")
-    .select("id, client_names, status")
+    .select("id, client_names, status, pin")
     .eq("access_token", token)
     .maybeSingle();
 
@@ -75,21 +76,29 @@ export default async function GalleryPage({
   const categories = [...byCategory.values()];
   const clientNames = wedding.client_names ?? "Dream Studio";
   const heroPreview = categories[0]?.items[0]?.previewUrl ?? "";
+  const hasPin = typeof wedding.pin === "string" && wedding.pin.length > 0;
 
   return (
-    <GalleryEntry
+    <GalleryGate
+      token={token}
+      hasPin={hasPin}
       clientNames={clientNames}
       previewUrl={heroPreview}
-      token={token}
     >
-      <GalleryTabs
-        categories={categories}
+      <GalleryEntry
         clientNames={clientNames}
-        watermark={clientNames}
-        initialSelections={selectionByMedia}
+        previewUrl={heroPreview}
         token={token}
-        submitted={wedding.status === "submitted"}
-      />
-    </GalleryEntry>
+      >
+        <GalleryTabs
+          categories={categories}
+          clientNames={clientNames}
+          watermark={clientNames}
+          initialSelections={selectionByMedia}
+          token={token}
+          submitted={wedding.status === "submitted"}
+        />
+      </GalleryEntry>
+    </GalleryGate>
   );
 }

@@ -1,0 +1,105 @@
+/* ============ SITE-WIDE ACCESS GATE ============ */
+
+.gate {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 24px;
+  background: var(--bg-dark);
+  color: var(--chrome-light);
+}
+.gate-mark {
+  height: 44px;
+  width: auto;
+  margin-bottom: 28px;
+  opacity: 0.9;
+}
+.gate-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--chrome);
+  margin-bottom: 18px;
+}
+.gate-title {
+  font-family: "Fraunces", serif;
+  font-weight: 400;
+  font-size: clamp(34px, 5vw, 52px);
+  color: var(--white);
+  margin: 0;
+}
+.gate-sub {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: 19px;
+  color: var(--chrome-light);
+  margin: 14px 0 36px;
+}
+.gate-form {
+  width: 100%;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.gate-label {
+  text-align: left;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--chrome);
+}
+.gate-input {
+  padding: 13px 16px;
+  border: 1px solid var(--line-dark);
+  border-radius: 2px;
+  background: var(--bg-dark-soft);
+  color: var(--white);
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+.gate-input:focus {
+  border-color: var(--chrome-light);
+}
+.gate-error {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #f0a58d;
+}
+.gate-btn {
+  margin-top: 6px;
+  padding: 14px 20px;
+  border: 1px solid var(--chrome-light);
+  border-radius: 2px;
+  background: var(--chrome-light);
+  color: var(--bg-dark);
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s var(--ease), color 0.3s var(--ease);
+}
+.gate-btn:hover:not(:disabled) {
+  background: var(--white);
+}
+.gate-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .gate {
+    padding: 24px 20px;
+  }
+  .gate-input,
+  .gate-btn {
+    min-height: 46px;
+  }
+}

@@ -273,6 +273,59 @@
   color: var(--ink-faint);
 }
 
+/* --- client access card --- */
+.dash-access {
+  margin: -8px 0 34px;
+  padding: 20px 24px 24px;
+  border: 1px solid var(--line);
+  background: var(--chrome-light);
+}
+.dash-access-title {
+  font-family: "Fraunces", serif;
+  font-weight: 400;
+  font-size: 22px;
+  color: var(--ink);
+  margin: 0;
+}
+.dash-access-sub {
+  font-size: 13px;
+  color: var(--ink-faint);
+  margin: 6px 0 18px;
+}
+.dash-access-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+.dash-access-label {
+  flex: 0 0 88px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.dash-access-value {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: var(--bg);
+  font-family: "Inter", sans-serif;
+  font-size: 13.5px;
+  color: var(--ink);
+  outline: none;
+}
+.dash-access-value:focus {
+  border-color: var(--ink);
+}
+.dash-access-value.mono {
+  font-family: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, monospace;
+  font-size: 18px;
+  letter-spacing: 0.3em;
+}
+
 /* --- section titles --- */
 .dash-table-title {
   font-family: "Fraunces", serif;
@@ -867,5 +920,18 @@
   }
   .dash-login {
     padding: 48px 20px;
+  }
+  .dash-access {
+    padding: 18px 16px 20px;
+  }
+  .dash-access-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .dash-access-label {
+    flex-basis: 100%;
+  }
+  .dash-access-row .btn-dash.sm {
+    min-height: 44px;
   }
 }

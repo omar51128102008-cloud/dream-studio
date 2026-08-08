@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { randomBytes } from "crypto";
+import { randomBytes, randomInt } from "crypto";
 import { createClient } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
@@ -65,6 +65,7 @@ export async function POST(request: Request) {
   }
 
   const access_token = randomBytes(16).toString("base64url");
+  const pin = randomInt(100000, 1000000).toString();
 
   const { data, error } = await supabase
     .from("weddings")
@@ -74,8 +75,9 @@ export async function POST(request: Request) {
       event_date: eventDate,
       status: "upcoming",
       access_token,
+      pin,
     })
-    .select("id, client_names, event_date, status, access_token")
+    .select("id, client_names, event_date, status, access_token, pin")
     .single();
 
   if (error) {

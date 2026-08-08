@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { getMediaUrl } from "@/lib/supabase/storage";
 import DownloadSelectionsButton from "@/components/DownloadSelectionsButton";
 import DownloadPhotosButton from "@/components/DownloadPhotosButton";
 import DeleteWeddingButton from "@/components/DeleteWeddingButton";
+import CopyField from "@/components/CopyField";
 import MediaWorkspace from "@/components/MediaWorkspace";
 
 export const dynamic = "force-dynamic";
@@ -38,13 +40,23 @@ export default async function WeddingDetailPage({
 
   const { data: wedding } = await supabase
     .from("weddings")
-    .select("id, client_names, event_date, status, studio_id")
+    .select("id, client_names, event_date, status, studio_id, access_token, pin")
     .eq("id", id)
     .maybeSingle();
 
   if (!staff || !wedding || wedding.studio_id !== staff.studio_id) {
     notFound();
   }
+
+  const h = await headers();
+  const host = h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000";
+  const proto =
+    h.get("x-forwarded-proto") ??
+    (host.startsWith("192.") || host.includes("localhost") ? "http" : "https");
+  const origin = `${proto}://${host}`;
+  const galleryUrl = wedding.access_token
+    ? `${origin}/gallery/${wedding.access_token}`
+    : "";
 
   const { data: media } = await supabase
     .from("media")
@@ -134,6 +146,16 @@ export default async function WeddingDetailPage({
           />
         </div>
       </header>
+
+      <section className="dash-access">
+        <h2 className="dash-access-title">Client access</h2>
+        <p className="dash-access-sub">
+          Send the link and the access PIN in separate messages, so the gallery
+          stays protected.
+        </p>
+        {galleryUrl && <CopyField label="Gallery link" value={galleryUrl} />}
+        {wedding.pin && <CopyField label="Access PIN" value={wedding.pin} mono />}
+      </section>
 
       <MediaWorkspace weddingId={id} initialRows={rows} />
     </main>

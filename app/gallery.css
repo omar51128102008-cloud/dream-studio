@@ -531,6 +531,70 @@
   color: var(--bg-dark);
 }
 
+/* --- PIN gate --- */
+.gallery-pin-card {
+  position: relative;
+  padding: 32px;
+  max-width: 440px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.gallery-pin-title {
+  font-family: "Fraunces", serif;
+  font-weight: 400;
+  font-size: clamp(32px, 5vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--white);
+}
+.gallery-pin-hint {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: clamp(17px, 2.2vw, 20px);
+  color: var(--chrome-light);
+  line-height: 1.5;
+  margin: 16px 0 30px;
+  max-width: 360px;
+}
+.gallery-pin-input {
+  width: 220px;
+  text-align: center;
+  font-family: "Inter", sans-serif;
+  font-size: 28px;
+  letter-spacing: 0.35em;
+  padding: 12px 8px;
+  border: none;
+  border-bottom: 2px solid var(--chrome);
+  border-radius: 0;
+  background: transparent;
+  color: var(--white);
+  caret-color: var(--chrome-light);
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+.gallery-pin-input:focus {
+  border-color: var(--chrome-light);
+}
+.gallery-pin-input::placeholder {
+  color: var(--chrome);
+  opacity: 0.5;
+}
+.gallery-pin-error {
+  margin: 18px 0 0;
+  font-size: 13px;
+  color: #f0a58d;
+}
+.gallery-pin-card .btn-begin {
+  margin-top: 28px;
+}
+.gallery-pin-card .btn-begin:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 @media (max-width: 700px) {
   .gallery-shell {
     padding: 40px 20px 96px;
@@ -601,6 +665,12 @@
   }
   .gallery-entry-content {
     padding: 24px 20px;
+  }
+  .gallery-pin-card {
+    padding: 24px 20px;
+  }
+  .gallery-pin-input {
+    width: 200px;
   }
   .gallery-entry-welcome {
     margin: 20px auto 34px;
