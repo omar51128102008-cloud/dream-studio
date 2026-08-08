@@ -156,7 +156,16 @@ export default function GalleryTabs({
   if (categories.length === 0) {
     return (
       <div className="gallery-shell">
-        <p className="gallery-empty">No media yet.</p>
+        <div className="gallery-empty-state">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 7a2 2 0 0 1 2-2h2.5l1.6 2H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" />
+            <circle cx="12" cy="12.5" r="3.2" />
+          </svg>
+          <p className="gallery-empty-title">No media yet</p>
+          <p className="gallery-empty">
+            Photos will appear here once they&apos;re ready.
+          </p>
+        </div>
       </div>
     );
   }
@@ -218,7 +227,7 @@ export default function GalleryTabs({
           ))}
         </nav>
 
-        <section aria-label={`${section.name} photos`}>
+        <section key={section.name} aria-label={`${section.name} photos`}>
           <span className="gallery-section-title">{section.name}</span>
           <div className="gallery-grid">
             {section.items.map((item) => {

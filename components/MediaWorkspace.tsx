@@ -135,13 +135,20 @@ export default function MediaWorkspace({
       )}
 
       {rows.length === 0 ? (
-        <p className="dash-empty">
-          No media yet.{" "}
-          <Link href={`/dashboard/weddings/${weddingId}/upload`} className="dash-link">
-            Upload the first images
+        <div className="dash-empty-state">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 7a2 2 0 0 1 2-2h2.5l1.6 2H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" />
+            <circle cx="12" cy="12.5" r="3.2" />
+          </svg>
+          <p className="dash-empty-title">No media yet</p>
+          <p className="dash-empty">Upload the first images to get started.</p>
+          <Link
+            href={`/dashboard/weddings/${weddingId}/upload`}
+            className="btn-dash"
+          >
+            Upload media
           </Link>
-          .
-        </p>
+        </div>
       ) : view === "table" ? (
         <div className="dash-table-scroll">
           <table className="dash-table dash-table--striped">

@@ -74,24 +74,35 @@
   background: var(--ink);
   color: var(--bg);
   cursor: pointer;
-  transition: background 0.35s var(--ease), color 0.35s var(--ease);
+  box-shadow: var(--shadow-sm);
+  transition: background 0.35s var(--ease), color 0.35s var(--ease),
+    box-shadow 0.3s var(--ease), transform 0.2s var(--ease);
 }
 .btn-submit:hover:not(:disabled) {
   background: transparent;
   color: var(--ink);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+.btn-submit:active:not(:disabled) {
+  transform: translateY(0);
 }
 .btn-submit:disabled {
   opacity: 0.6;
   cursor: default;
+  box-shadow: none;
 }
 .gallery-band .btn-submit {
   border-color: var(--chrome-light);
   background: transparent;
   color: var(--chrome-light);
+  box-shadow: none;
 }
 .gallery-band .btn-submit:hover:not(:disabled) {
   background: var(--chrome-light);
   color: var(--bg-dark);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
+  transform: translateY(-1px);
 }
 .badge-submitted {
   display: inline-flex;
@@ -190,7 +201,9 @@
   background: var(--bg);
   border: 1px solid var(--line);
   border-radius: 2px;
+  box-shadow: var(--shadow-sm);
   transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease);
+  animation: cardIn 0.6s var(--ease) backwards;
 }
 .gallery-thumb {
   display: block;
@@ -212,10 +225,46 @@
 }
 .gallery-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 16px 34px rgba(12, 12, 11, 0.16);
+  box-shadow: var(--shadow-lg);
 }
 .gallery-thumb:hover img {
   opacity: 0.9;
+}
+.gallery-grid .gallery-card:nth-child(2) {
+  animation-delay: 0.05s;
+}
+.gallery-grid .gallery-card:nth-child(3) {
+  animation-delay: 0.1s;
+}
+.gallery-grid .gallery-card:nth-child(4) {
+  animation-delay: 0.15s;
+}
+.gallery-grid .gallery-card:nth-child(5) {
+  animation-delay: 0.2s;
+}
+.gallery-grid .gallery-card:nth-child(6) {
+  animation-delay: 0.25s;
+}
+.gallery-grid .gallery-card:nth-child(7) {
+  animation-delay: 0.3s;
+}
+.gallery-grid .gallery-card:nth-child(8) {
+  animation-delay: 0.35s;
+}
+.gallery-grid .gallery-card:nth-child(9) {
+  animation-delay: 0.4s;
+}
+.gallery-grid .gallery-card:nth-child(10) {
+  animation-delay: 0.45s;
+}
+.gallery-grid .gallery-card:nth-child(11) {
+  animation-delay: 0.5s;
+}
+.gallery-grid .gallery-card:nth-child(12) {
+  animation-delay: 0.55s;
+}
+.gallery-grid .gallery-card:nth-child(n + 13) {
+  animation-delay: 0.6s;
 }
 
 /* --- icon buttons (thin line) --- */
@@ -232,17 +281,22 @@
   justify-content: center;
   padding: 0;
   cursor: pointer;
-  transition: border-color 0.3s ease, background 0.3s ease;
+  transition: border-color 0.3s ease, background 0.3s ease,
+    transform 0.2s var(--ease);
 }
 .icon-btn svg {
   stroke: var(--ink);
   fill: none;
-  stroke-width: 1.4;
+  stroke-width: 1.5;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 .icon-btn:hover {
   border-color: var(--ink);
+  transform: scale(1.06);
+}
+.icon-btn:active {
+  transform: scale(0.95);
 }
 .icon-btn.is-on {
   border-color: var(--ink);
@@ -267,13 +321,14 @@
   border: 1px solid var(--line);
   border-radius: 2px;
   outline: none;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .note-field::placeholder {
   color: var(--ink-faint);
 }
 .note-field:focus {
   border-color: var(--ink);
+  box-shadow: var(--ring);
 }
 .note-field[readonly] {
   cursor: default;
@@ -431,9 +486,39 @@
 }
 
 /* --- empty state --- */
+.gallery-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+  padding: 88px 24px;
+  border: 1px dashed var(--line);
+  border-radius: 4px;
+}
+.gallery-empty-state svg {
+  width: 34px;
+  height: 34px;
+  fill: none;
+  stroke: var(--ink-faint);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  margin-bottom: 4px;
+}
+.gallery-empty-title {
+  font-family: "Fraunces", serif;
+  font-weight: 400;
+  font-size: 24px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0;
+}
 .gallery-empty {
-  color: var(--ink-soft);
-  padding: 8px 0;
+  color: var(--ink-faint);
+  font-size: 13px;
+  margin: 0;
 }
 
 /* --- entry screen --- */
@@ -524,11 +609,17 @@
   background: transparent;
   color: var(--chrome-light);
   cursor: pointer;
-  transition: background 0.4s var(--ease), color 0.4s var(--ease);
+  transition: background 0.4s var(--ease), color 0.4s var(--ease),
+    box-shadow 0.4s var(--ease), transform 0.25s var(--ease);
 }
 .btn-begin:hover {
   background: var(--chrome-light);
   color: var(--bg-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+}
+.btn-begin:active {
+  transform: translateY(0);
 }
 
 /* --- PIN gate --- */
