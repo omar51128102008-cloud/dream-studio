@@ -143,7 +143,8 @@ export default function MediaWorkspace({
           .
         </p>
       ) : view === "table" ? (
-        <table className="dash-table dash-table--striped">
+        <div className="dash-table-scroll">
+          <table className="dash-table dash-table--striped">
           <thead>
             <tr>
               <th>Filename</th>
@@ -187,7 +188,8 @@ export default function MediaWorkspace({
               </tr>
             ))}
           </tbody>
-        </table>
+          </table>
+        </div>
       ) : (
         <div className="dash-gallery">
           {categories.map((category) => (

@@ -62,8 +62,9 @@ export default async function WeddingsPage() {
 
       <main className="dash-main">
         {weddings && weddings.length > 0 ? (
-          <table className="dash-table">
-            <thead>
+          <div className="dash-table-scroll">
+            <table className="dash-table">
+              <thead>
               <tr>
                 <th>Client</th>
                 <th>Date</th>
@@ -107,6 +108,7 @@ export default async function WeddingsPage() {
               ))}
             </tbody>
           </table>
+          </div>
         ) : (
           <p className="dash-empty">
             No weddings yet.{" "}

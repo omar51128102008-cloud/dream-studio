@@ -778,15 +778,94 @@
   }
   .dash-nav-inner {
     padding: 13px 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .dash-nav-links {
+    gap: 18px;
+  }
+  .dash-nav-links a {
+    padding: 8px 0;
   }
   .dash-band-inner {
     padding: 44px 20px 36px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .dash-band .dash-actions {
+    width: 100%;
+  }
+  .dash-band .dash-actions .btn-dash {
+    width: 100%;
+    justify-content: center;
+    min-height: 46px;
+    padding: 13px 14px;
+  }
+  .dash-header .dash-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .dash-header .dash-actions .btn-dash {
+    min-height: 46px;
+    padding: 12px 10px;
+  }
+  .dash-table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .dash-table {
+    min-width: 600px;
+  }
+  .btn-dash.sm {
+    min-height: 44px;
+    padding: 10px 12px;
+  }
+  .dash-view-toggle button {
+    min-height: 44px;
+    padding: 10px 14px;
   }
   .dash-gallery-grid {
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .dash-thumb-delete {
+    min-height: 40px;
+    padding: 8px 12px;
   }
   .dash-lightbox {
     padding: 12px;
+  }
+  .dash-lightbox-stage {
+    max-height: calc(
+      90vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+    );
+  }
+  .dash-lightbox-actions .btn-dash {
+    min-height: 44px;
+  }
+  .dash-modal {
+    padding: 12px;
+  }
+  .dash-modal-box {
+    padding: 24px 20px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .dash-modal-box .dash-actions .btn-dash {
+    flex: 1;
+    min-height: 44px;
+  }
+  .dash-input,
+  .dash-select {
+    min-height: 44px;
+  }
+  .dash-form .btn-dash {
+    min-height: 46px;
+    padding: 12px 18px;
+  }
+  .dash-login {
+    padding: 48px 20px;
   }
 }

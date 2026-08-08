@@ -19,17 +19,25 @@ function LoginForm() {
     setError(null);
     setLoading(true);
 
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
 
-    if (error) {
-      setError(error.message);
+      if (error) {
+        console.error("[login] sign-in error:", error);
+        setError(error.message);
+        setLoading(false);
+        return;
+      }
+
+      console.log("[login] signed in — redirecting to", next);
+      router.push(next);
+      router.refresh();
+    } catch (err) {
+      console.error("[login] unexpected error during sign-in:", err);
       setLoading(false);
-      return;
+      setError("Something went wrong signing you in. Please try again.");
     }
-
-    router.push(next);
-    router.refresh();
   }
 
   return (
