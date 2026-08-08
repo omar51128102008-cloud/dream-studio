@@ -9,8 +9,11 @@ export type GalleryCategory = {
   items: GalleryMedia[];
 };
 
+export type DeliveryType = "print" | "digital";
+
 export type SelectionState = {
   favorited: boolean;
   inAlbum: boolean;
   clientNote: string;
+  deliveryType: DeliveryType | null;
 };

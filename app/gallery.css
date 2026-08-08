@@ -183,6 +183,14 @@
 }
 .gallery-card {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease);
 }
 .gallery-thumb {
   display: block;
@@ -192,8 +200,6 @@
   background: var(--chrome-light);
   border-radius: 2px;
   cursor: zoom-in;
-  box-shadow: 0 1px 2px rgba(12, 12, 11, 0.04);
-  transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease);
 }
 .gallery-thumb img {
   width: 100%;
@@ -204,7 +210,7 @@
   display: block;
   transition: opacity 0.45s var(--ease);
 }
-.gallery-card:hover .gallery-thumb {
+.gallery-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 16px 34px rgba(12, 12, 11, 0.16);
 }
@@ -272,6 +278,110 @@
 .note-field[readonly] {
   cursor: default;
   opacity: 0.55;
+}
+.gallery-card .note-field {
+  position: static;
+  width: 100%;
+  margin: 0;
+  padding: 9px 12px;
+  background: var(--chrome-light);
+  color: var(--ink);
+}
+.gallery-card .note-field::placeholder {
+  color: var(--ink-faint);
+}
+
+/* --- delivery choice (Print / Digital) --- */
+.delivery-choice {
+  display: inline-flex;
+  margin-top: 10px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.gallery-card .delivery-choice {
+  margin-top: 0;
+  align-self: flex-start;
+}
+.delivery-opt {
+  padding: 6px 14px;
+  border: none;
+  border-right: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.delivery-opt:last-child {
+  border-right: none;
+}
+.delivery-opt:hover:not(:disabled) {
+  color: var(--ink);
+}
+.delivery-opt.is-on {
+  background: var(--ink);
+  color: var(--bg);
+}
+.delivery-choice.is-disabled {
+  opacity: 0.55;
+}
+.delivery-opt:disabled {
+  cursor: default;
+}
+
+/* --- missing delivery highlight --- */
+.gallery-card.needs-delivery .gallery-thumb {
+  outline: 1px solid var(--ink);
+  outline-offset: 2px;
+}
+.needs-delivery-badge {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  padding: 3px 10px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* --- delivery warning banner --- */
+.delivery-warning {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 14px 40px;
+  border-bottom: 1px solid var(--line);
+  background: var(--chrome-light);
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+.delivery-warning strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* --- lightbox delivery --- */
+.lightbox-delivery {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+.lightbox-delivery .delivery-choice {
+  margin-top: 0;
+  background: rgba(246, 246, 244, 0.94);
 }
 
 /* --- lightbox --- */

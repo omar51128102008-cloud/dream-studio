@@ -41,7 +41,7 @@ export default async function GalleryPage({
 
   const { data: selections } = await supabase
     .from("selections")
-    .select("media_id, favorited, in_album, client_note")
+    .select("media_id, favorited, in_album, client_note, delivery_type")
     .in("media_id", mediaIds);
 
   const selectionByMedia: Record<string, SelectionState> = {};
@@ -51,6 +51,9 @@ export default async function GalleryPage({
       favorited: sel?.favorited ?? false,
       inAlbum: sel?.in_album ?? false,
       clientNote: sel?.client_note ?? "",
+      deliveryType: sel?.delivery_type === "print" || sel?.delivery_type === "digital"
+        ? sel.delivery_type
+        : null,
     };
   }
 

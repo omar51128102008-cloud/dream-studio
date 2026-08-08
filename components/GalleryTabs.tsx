@@ -1,11 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import type { GalleryCategory, GalleryMedia, SelectionState } from "@/types/media";
+import type {
+  DeliveryType,
+  GalleryCategory,
+  GalleryMedia,
+  SelectionState,
+} from "@/types/media";
 import Lightbox from "./Lightbox";
 import FavoriteButton from "./FavoriteButton";
 import AlbumButton from "./AlbumButton";
 import NoteInput from "./NoteInput";
+import DeliveryChoice from "./DeliveryChoice";
 import StudioLogo from "./StudioLogo";
 
 export default function GalleryTabs({
@@ -31,7 +37,12 @@ export default function GalleryTabs({
 
   function getSelection(mediaId: string): SelectionState {
     return (
-      selections[mediaId] ?? { favorited: false, inAlbum: false, clientNote: "" }
+      selections[mediaId] ?? {
+        favorited: false,
+        inAlbum: false,
+        clientNote: "",
+        deliveryType: null,
+      }
     );
   }
 
@@ -55,6 +66,7 @@ export default function GalleryTabs({
           favorited: patch.favorited,
           in_album: patch.inAlbum,
           client_note: patch.clientNote,
+          delivery_type: patch.deliveryType,
         },
       }),
     });
@@ -62,6 +74,14 @@ export default function GalleryTabs({
       console.error("[selections] save failed", await res.json());
     }
     return res.ok;
+  }
+
+  async function setDelivery(mediaId: string, type: DeliveryType) {
+    if (isSubmitted) return;
+    const prev = getSelection(mediaId).deliveryType;
+    patchSelection(mediaId, { deliveryType: type });
+    const ok = await savePatch(mediaId, { deliveryType: type });
+    if (!ok) patchSelection(mediaId, { deliveryType: prev });
   }
 
   async function toggleFavorite(mediaId: string) {
@@ -86,8 +106,34 @@ export default function GalleryTabs({
     if (!ok) patchSelection(mediaId, { clientNote: getSelection(mediaId).clientNote });
   }
 
+  const selectedPhotoIds = Object.keys(selections).filter((id) => {
+    const sel = selections[id];
+    return sel && (sel.favorited || sel.inAlbum);
+  });
+
+  const missingDelivery = selectedPhotoIds.filter(
+    (id) => !getSelection(id).deliveryType
+  );
+
   async function submitSelection() {
     if (submitting) return;
+
+    if (missingDelivery.length > 0) {
+      const first = missingDelivery[0];
+      const category = categories.find((c) =>
+        c.items.some((i) => i.id === first)
+      );
+      if (category && category.name !== active) {
+        setActive(category.name);
+      }
+      setTimeout(() => {
+        document
+          .getElementById(`gallery-media-${first}`)
+          ?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 150);
+      return;
+    }
+
     setSubmitting(true);
     try {
       const res = await fetch("/api/submit", {
@@ -141,6 +187,17 @@ export default function GalleryTabs({
         </div>
       </header>
 
+      {missingDelivery.length > 0 && !isSubmitted && (
+        <div className="delivery-warning" role="alert">
+          <strong>
+            {missingDelivery.length} selected photo
+            {missingDelivery.length > 1 ? "s" : ""} need
+            {missingDelivery.length === 1 ? "s" : ""} a Print/Digital choice
+          </strong>{" "}
+          — pick Print or Digital for each highlighted photo before submitting.
+        </div>
+      )}
+
       <div className="gallery-shell">
         <nav
           className="gallery-tabs"
@@ -166,8 +223,17 @@ export default function GalleryTabs({
           <div className="gallery-grid">
             {section.items.map((item) => {
               const sel = getSelection(item.id);
+              const isSelected = sel.favorited || sel.inAlbum;
+              const needsDelivery =
+                isSelected && missingDelivery.includes(item.id);
               return (
-                <div key={item.id} className="gallery-card">
+                <div
+                  key={item.id}
+                  id={`gallery-media-${item.id}`}
+                  className={
+                    "gallery-card" + (needsDelivery ? " needs-delivery" : "")
+                  }
+                >
                   <button
                     className="gallery-thumb"
                     onClick={() => setSelected(item)}
@@ -179,6 +245,9 @@ export default function GalleryTabs({
                       loading="lazy"
                     />
                   </button>
+                  {needsDelivery && (
+                    <span className="needs-delivery-badge">Print/Digital needed</span>
+                  )}
                   <FavoriteButton
                     favorited={sel.favorited}
                     onToggle={() => toggleFavorite(item.id)}
@@ -190,6 +259,13 @@ export default function GalleryTabs({
                     position={{ top: 8, left: 8, right: undefined }}
                     disabled={isSubmitted}
                   />
+                  {isSelected && (
+                    <DeliveryChoice
+                      value={sel.deliveryType}
+                      onChange={(type) => setDelivery(item.id, type)}
+                      disabled={isSubmitted}
+                    />
+                  )}
                   <NoteInput
                     value={sel.clientNote}
                     onSave={(note) => saveNote(item.id, note)}
@@ -211,6 +287,7 @@ export default function GalleryTabs({
           onToggleFavorite={() => toggleFavorite(selected.id)}
           onToggleAlbum={() => toggleAlbum(selected.id)}
           onSaveNote={(note) => saveNote(selected.id, note)}
+          onSetDelivery={(type) => setDelivery(selected.id, type)}
           onClose={() => setSelected(null)}
         />
       )}

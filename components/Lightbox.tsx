@@ -1,11 +1,16 @@
 "use client";
 
 import { useEffect } from "react";
-import type { GalleryMedia, SelectionState } from "@/types/media";
+import type {
+  DeliveryType,
+  GalleryMedia,
+  SelectionState,
+} from "@/types/media";
 import Watermark from "./Watermark";
 import FavoriteButton from "./FavoriteButton";
 import AlbumButton from "./AlbumButton";
 import NoteInput from "./NoteInput";
+import DeliveryChoice from "./DeliveryChoice";
 
 export default function Lightbox({
   item,
@@ -15,6 +20,7 @@ export default function Lightbox({
   onToggleFavorite,
   onToggleAlbum,
   onSaveNote,
+  onSetDelivery,
   onClose,
 }: {
   item: GalleryMedia;
@@ -24,6 +30,7 @@ export default function Lightbox({
   onToggleFavorite: () => void;
   onToggleAlbum: () => void;
   onSaveNote: (note: string) => void;
+  onSetDelivery: (type: DeliveryType) => void;
   onClose: () => void;
 }) {
   useEffect(() => {
@@ -68,6 +75,15 @@ export default function Lightbox({
           position={{ top: 8, left: 8, right: 60, bottom: "auto" }}
           disabled={disabled}
         />
+        {(selection.favorited || selection.inAlbum) && (
+          <div className="lightbox-delivery">
+            <DeliveryChoice
+              value={selection.deliveryType}
+              onChange={onSetDelivery}
+              disabled={disabled}
+            />
+          </div>
+        )}
       </div>
       <button
         className="lightbox-close"

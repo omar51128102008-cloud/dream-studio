@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore, useState } from "react";
 
 const STORAGE_PREFIX = "dreamstudio:entered:";
+
+const emptySubscribe = () => () => {};
 
 export default function GalleryEntry({
   clientNames,
@@ -15,23 +17,21 @@ export default function GalleryEntry({
   token: string;
   children: React.ReactNode;
 }) {
-  const [entered, setEntered] = useState<boolean | null>(null);
+  const [dismissed, setDismissed] = useState(false);
 
-  useEffect(() => {
-    let seen = false;
-    try {
-      seen = localStorage.getItem(`${STORAGE_PREFIX}${token}`) === "1";
-    } catch {
-      seen = true;
-    }
-    setEntered(seen);
-  }, [token]);
+  const seen = useSyncExternalStore(
+    emptySubscribe,
+    () => {
+      try {
+        return localStorage.getItem(`${STORAGE_PREFIX}${token}`) === "1";
+      } catch {
+        return true;
+      }
+    },
+    () => false
+  );
 
-  if (entered === null) {
-    return null;
-  }
-
-  if (entered) {
+  if (dismissed || seen) {
     return <>{children}</>;
   }
 
@@ -41,7 +41,7 @@ export default function GalleryEntry({
     } catch {
       // storage unavailable — just proceed
     }
-    setEntered(true);
+    setDismissed(true);
   }
 
   return (

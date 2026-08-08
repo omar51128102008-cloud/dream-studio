@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getMediaUrl } from "@/lib/supabase/storage";
 import DownloadSelectionsButton from "@/components/DownloadSelectionsButton";
+import DownloadPhotosButton from "@/components/DownloadPhotosButton";
 import DeleteWeddingButton from "@/components/DeleteWeddingButton";
 import MediaWorkspace from "@/components/MediaWorkspace";
 
@@ -55,7 +56,7 @@ export default async function WeddingDetailPage({
 
   const { data: selections } = await supabase
     .from("selections")
-    .select("media_id, favorited, in_album, client_note")
+    .select("media_id, favorited, in_album, client_note, delivery_type")
     .in("media_id", mediaIds);
 
   const selectionByMedia = new Map(
@@ -75,9 +76,20 @@ export default async function WeddingDetailPage({
       favorited: sel?.favorited ?? false,
       inAlbum: sel?.in_album ?? false,
       clientNote: sel?.client_note ?? "",
+      deliveryType: sel?.delivery_type ?? null,
       previewUrl: item.preview_path ? getMediaUrl(item.preview_path) : "",
     };
   });
+
+  const selectedPhotos = rows
+    .filter((row) => row.favorited || row.inAlbum)
+    .map(({ id, category, filename, deliveryType, previewUrl }) => ({
+      id,
+      category,
+      filename,
+      deliveryType,
+      previewUrl,
+    }));
 
   return (
     <main className="dash-main">
@@ -112,6 +124,7 @@ export default async function WeddingDetailPage({
         </div>
         <div className="dash-actions">
           <DownloadSelectionsButton weddingId={id} />
+          <DownloadPhotosButton weddingId={id} photos={selectedPhotos} />
           <Link href={`/dashboard/weddings/${id}/upload`} className="btn-dash">
             Upload media
           </Link>

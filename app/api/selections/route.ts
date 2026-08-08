@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
-const ALLOWED_KEYS = ["favorited", "in_album", "client_note"] as const;
+const ALLOWED_KEYS = ["favorited", "in_album", "client_note", "delivery_type"] as const;
+const DELIVERY_VALUES = ["print", "digital"] as const;
 
 type SelectionPatch = Partial<
   Record<(typeof ALLOWED_KEYS)[number], boolean | string | null>
@@ -28,6 +29,18 @@ export async function POST(request: Request) {
   for (const key of ALLOWED_KEYS) {
     if (patch[key] !== undefined) {
       update[key] = patch[key];
+    }
+  }
+
+  if (update.delivery_type !== undefined && update.delivery_type !== null) {
+    if (
+      typeof update.delivery_type !== "string" ||
+      !DELIVERY_VALUES.includes(update.delivery_type as (typeof DELIVERY_VALUES)[number])
+    ) {
+      return NextResponse.json(
+        { error: "delivery_type must be 'print' or 'digital'" },
+        { status: 400 }
+      );
     }
   }
 
